@@ -50,6 +50,13 @@ app.use('/', index);
 app.use('/image', image);
  
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is listening at http://localhost:${PORT}`)
-});
+
+// Only start the server if this file is run directly (not required by tests)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is listening at http://localhost:${PORT}`)
+    });
+}
+
+// Export the app for testing
+module.exports = app;
