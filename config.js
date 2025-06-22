@@ -1,6 +1,6 @@
 var config = {}
 
-// Production-ready version using environment variables when available
+// Updated with Joseph's MongoDB Atlas credentials
 config.mongoURI = {
     production: process.env.MONGODB_URI || 'mongodb+srv://joseph:Bigmeech12@cluster0.qvxhxmt.mongodb.net/darkroom?retryWrites=true&w=majority',
     development: 'mongodb+srv://joseph:Bigmeech12@cluster0.qvxhxmt.mongodb.net/darkroom-dev?retryWrites=true&w=majority',
