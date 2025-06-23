@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    tools {
+        nodejs 'Node18'  // This references the NodeJS installation we configured
+    }
+    
     environment {
         // Render deploy hook
         RENDER_DEPLOY_HOOK = credentials('render-deploy-hook')
