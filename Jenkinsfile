@@ -33,6 +33,22 @@ pipeline {
                 sh 'npm test'
             }
         }
+        stage('Run Tests') {
+            steps {
+                echo 'Running tests...'
+                sh 'npm test'
+            }
+            post {
+                failure {
+                    emailext (
+                        subject: "Test Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
+                        body: "Tests failed in build ${env.BUILD_NUMBER}. Check console at ${env.BUILD_URL}",
+                        to: "${env.CHANGE_AUTHOR_EMAIL}"
+                    )
+                }
+            }
+        }
 }
+
 
 
