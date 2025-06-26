@@ -48,7 +48,15 @@ pipeline {
                 }
             }
         }
-}
+         stage('Deploy to Render') {
+            steps {
+                echo 'Deploying to Render...'
+                sh 'curl -X POST "$RENDER_DEPLOY_HOOK"'
+                echo "App URL: ${env.RENDER_APP_URL}"
+            }
+        }
+    }
+
 
 
 
