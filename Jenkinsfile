@@ -9,4 +9,15 @@ pipeline {
         SLACK_TOKEN = credentials('slack-bot-token')
         RENDER_APP_URL = 'https://gallery-fa8q.onrender.com'
     }
+    
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/joseden/gallery.git'
+                echo 'Repository cloned successfully'
+            }
+        }
+    } 
+
+    
 }
