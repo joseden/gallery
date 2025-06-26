@@ -48,14 +48,49 @@ pipeline {
                 }
             }
         }
+        
          stage('Deploy to Render') {
             steps {
                 echo 'Deploying to Render...'
                 sh 'curl -X POST "$RENDER_DEPLOY_HOOK"'
                 echo "App URL: ${env.RENDER_APP_URL}"
+
+                     post {
+                success {
+                    slackSend(
+                        channel: '#joseph_ip1',
+                        color: 'good',
+                        message: "🚀 Deployment Successful! Build #${env.BUILD_NUMBER} deployed to Render: ${env.RENDER_APP_URL}",
+                        tokenCredentialId: 'slack-bot-token',
+                        botUser: true
+                    )
+                }
             }
         }
     }
+    
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+            slackSend(
+                channel: '#joseph_ip1',
+                color: 'danger',
+                message: "🚨 DEPLOYMENT FAILED! Build #${env.BUILD_NUMBER} failed. Check logs: ${env.BUILD_URL}",
+                tokenCredentialId: 'slack-bot-token',
+                botUser: true
+            )
+        }
+    }
+} 
+                
+            
+        
+    
+
+
 
 
 
