@@ -1,20 +1,26 @@
 pipeline {
     agent any
-    tools { nodejs 'Node18' }
+    
+    tools { 
+        nodejs 'Node18' 
+    }
+    
     environment {
         RENDER_DEPLOY_HOOK = credentials('render-deploy-hook')
         SLACK_TOKEN = credentials('slack-bot-token')
         RENDER_APP_URL = 'https://gallery-fa8q.onrender.com'
     }
+    
     stages {
         stage('Clone Repository') {
             steps {
                 script {
-                    git url: 'https://github.com/joseden/gallery.git'
+                    git branch: 'main', url: 'https://github.com/joseden/gallery.git'
                     echo "Cloned repository successfully"
                 }
             }
         }
+        
         stage('Install Dependencies') {
             steps {
                 script {
@@ -23,6 +29,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Run Tests') {
             steps {
                 script {
@@ -37,6 +44,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Deploy to Render') {
             steps {
                 script {
@@ -49,8 +57,11 @@ pipeline {
             }
         }
     }
+    
     post {
-        success { echo 'Pipeline completed successfully!' }
+        success { 
+            echo 'Pipeline completed successfully!' 
+        }
         failure { 
             slackSend channel: '#joseph_ip1', color: 'danger',
                      message: "🚨 DEPLOYMENT FAILED! Build #${env.BUILD_NUMBER} failed. Check logs: ${env.BUILD_URL}",
