@@ -4,6 +4,7 @@ pipeline {
     tools {
         nodejs 'Node18'
     }
+    
     environment {
         RENDER_DEPLOY_HOOK = credentials('render-deploy-hook')
         SLACK_TOKEN = credentials('slack-bot-token')
@@ -17,22 +18,14 @@ pipeline {
                 echo 'Repository cloned successfully'
             }
         }
-    } 
-
-    stage('Install Dependencies') {
+        
+        stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
                 sh 'npm install'
             }
-
-    }
-       
-        stage('Run Tests') {
-            steps {
-                echo 'Running tests...'
-                sh 'npm test'
-            }
         }
+        
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
@@ -49,13 +42,13 @@ pipeline {
             }
         }
         
-         stage('Deploy to Render') {
+        stage('Deploy to Render') {
             steps {
                 echo 'Deploying to Render...'
                 sh 'curl -X POST "$RENDER_DEPLOY_HOOK"'
                 echo "App URL: ${env.RENDER_APP_URL}"
-
-                     post {
+            }
+            post {
                 success {
                     slackSend(
                         channel: '#joseph_ip1',
@@ -84,14 +77,4 @@ pipeline {
             )
         }
     }
-} 
-                
-            
-        
-    
-
-
-
-
-
-
+}
